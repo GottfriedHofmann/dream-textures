@@ -1,5 +1,6 @@
 from .operators.install_dependencies import InstallDependencies, UninstallDependencies
 from .operators.open_latest_version import OpenLatestVersion
+from .operators.image_editor import NextImage, PrevImage
 from .operators.dream_texture import DreamTexture, ReleaseGenerator, CancelGenerator
 from .operators.view_history import SCENE_UL_HistoryList, RecallHistoryEntry, ClearHistory, RemoveHistorySelection, ExportHistorySelection, ImportPromptFile
 from .operators.inpaint_area_brush import InpaintAreaBrushActivated
@@ -25,6 +26,8 @@ CLASSES = (
     ReleaseGenerator,
     CancelGenerator,
     OpenLatestVersion,
+    NextImage, 
+    PrevImage,
     SCENE_UL_HistoryList,
     RecallHistoryEntry,
     ClearHistory,

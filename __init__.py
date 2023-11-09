@@ -45,6 +45,8 @@ if current_process().name != "__actor__":
     from .operators.dream_texture import DreamTexture, kill_generator
     from .property_groups.dream_prompt import DreamPrompt
     from .property_groups.seamless_result import SeamlessResult
+    from .operators.image_editor import NextImage, PrevImage
+    from .preferences import StableDiffusionPreferences
     from .ui.presets import register_default_presets
     
     from . import engine
@@ -58,6 +60,8 @@ if current_process().name != "__actor__":
         ('requirements/win-dml.txt', 'Windows (DirectML)', 'Windows with DirectX 12 GPU'),
         ('requirements/dreamstudio.txt', 'DreamStudio', 'Cloud Compute Service')
     )
+
+    addon_keymaps=[]
 
     def register():
         dt_op = bpy.ops
@@ -133,6 +137,13 @@ if current_process().name != "__actor__":
         # Register the default backend.
         bpy.utils.register_class(DiffusersBackend)
 
+        wm=bpy.context.window_manager
+        km=wm.keyconfigs.addon.keymaps.new(name='Image',space_type='IMAGE_EDITOR')
+        kmi_next=km.keymap_items.new(NextImage.bl_idname,type='PAGE_UP',value='PRESS')
+        kmi_prev=km.keymap_items.new(PrevImage.bl_idname,type='PAGE_DOWN',value='PRESS')
+        addon_keymaps.append((km,kmi_next))
+        addon_keymaps.append((km,kmi_prev)) 
+
     def unregister():
         for cls in PREFERENCE_CLASSES:
             bpy.utils.unregister_class(cls)
@@ -145,6 +156,9 @@ if current_process().name != "__actor__":
         bpy.types.RENDER_PT_context.remove(engine.draw_device)
 
         engine.unregister()
+        for km,kmi in addon_keymaps:
+            km.keymap_items.remove(kmi)
+            addon_keymaps.clear()
         
         unregister_render_pass()
 
